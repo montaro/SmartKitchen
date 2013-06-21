@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	String TAG = "Kitchen Server";
+	ReceiveOrderFromTable roft = new ReceiveOrderFromTable();
 	Server server = new Server(new MyServer(this), 15652, false);
 
 	@Override
@@ -19,7 +20,7 @@ public class MainActivity extends Activity {
 		Log.d(TAG, "Kitchen Started");
 		setContentView(R.layout.activity_main);
 		Toast.makeText(this, "Server Started", Toast.LENGTH_SHORT).show();
-		new ReceiveOrderFromTable().execute("");
+		roft.execute("");
 	}
 
 	@Override
@@ -33,13 +34,18 @@ public class MainActivity extends Activity {
 		Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
 	}
 
-	private class ReceiveOrderFromTable extends AsyncTask<String, Integer, Boolean> {
+	private class ReceiveOrderFromTable extends AsyncTask<String, Integer, String> {
 
 		@Override
-		protected Boolean doInBackground(String... messages) {
+		protected String doInBackground(String... messages) {
 			server.startServer();
 			Log.d(TAG, "Server Started");
-			return true;
+			return "Server Started";
+		}
+		
+		@Override
+		protected void onPostExecute (String result){
+			Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
 		}
 
 	}
