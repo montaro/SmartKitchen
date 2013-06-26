@@ -1,7 +1,9 @@
 package com.smart.smartkitchen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +23,9 @@ public class MyServer implements ConnectionListener {
 	public MyServer(Context ctx) {
 		this.ctx = ctx;
 	}
+	public static Map<String, Integer> clients = new HashMap<String, Integer>();
+	public static int tables = 0;
+	public static int connected = 1;
 
 	String TAG = "Table Client";
 
@@ -57,7 +62,7 @@ public class MyServer implements ConnectionListener {
 		}
 		// iterator gets items
 		Iterator<String> ir1 = l1.iterator();
-		String order = "New Order\n\nTable number: #\n\nOrder number: " + ++orderNo + "\n\n";
+		String order = "New Order\n\nTable number: " + connected + "\n\nOrder number: " + ++orderNo + "\n\n";
 		while (ir1.hasNext()) {
 			String msg1 = ir1.next();
 			Log.d(TAG, "l1 Message  " + msg1);
@@ -69,6 +74,11 @@ public class MyServer implements ConnectionListener {
 
 	@Override
 	public void clientConnected(ServerConnection conn) {
+		String clientIP = conn.getIP();
+		if (!clients.containsKey(clientIP)){
+			clients.put(clientIP, clients.size()+1);
+		}
+		connected = clients.get(clientIP);
 		Log.d(TAG, "Client Connected:");
 		String message = "Client Connected: " + conn.getIP();
 		System.out.println(message);
