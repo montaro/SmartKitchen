@@ -37,40 +37,31 @@ public class MyServer implements ConnectionListener {
 		String message = "Received message: " + receivedMessage;
 		JSONObject deserializedMessage = new JSONObject();
 		JSONArray l1j = new JSONArray();
-		JSONArray l2j = new JSONArray();
 		ArrayList<String> l1 = new ArrayList<String>();
-		ArrayList<String> l2 = new ArrayList<String>();
 
 		try {
 			deserializedMessage = new JSONObject(receivedMessage);
 			l1j = new JSONArray(deserializedMessage.get("l1").toString());
-			l2j = new JSONArray(deserializedMessage.get("l2").toString());
 			Log.d(TAG, "Received message: " + message);
 			System.out.println(message);
-			if (l1j != null && l2j != null) {
+			if (l1j != null) {
 				int len = l1j.length();
 				for (int i = 0; i < len; i++) {
 					l1.add(l1j.get(i).toString());
-					l2.add(l2j.get(i).toString());
 				}
 			}
 			Log.d(TAG, "l1j length  " + l1j.length());
-			Log.d(TAG, "l2j length  " + l2j.length());
 			Log.d(TAG, "l1 length  " + l1.size());
-			Log.d(TAG, "l2 length  " + l2.size());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		// iterator gets items
 		Iterator<String> ir1 = l1.iterator();
-		Iterator<String> ir2 = l2.iterator();
 		String order = "New Order\n\nTable number: #\n\nOrder number: " + ++orderNo + "\n\n";
 		while (ir1.hasNext()) {
 			String msg1 = ir1.next();
-			String msg2 = ir2.next();
 			Log.d(TAG, "l1 Message  " + msg1);
-			Log.d(TAG, "l2 Message  " + msg2);
-			order = order + "Item: " + msg1 + "----------" + "Count: " + msg2 + "\n\n";
+			order = order + "Item: " + msg1 + "\n\n";
 		}
 		Log.d(TAG, "Final Message" + order);
 		new ShowTheOrder().execute(order);
