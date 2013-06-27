@@ -24,7 +24,6 @@ public class MyServer implements ConnectionListener {
 		this.ctx = ctx;
 	}
 	public static Map<String, Integer> clients = new HashMap<String, Integer>();
-	public static int tables = 0;
 	public static int connected = 1;
 
 	String TAG = "Table Client";
